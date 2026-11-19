@@ -14,12 +14,13 @@ export default function Gift({ onLibrary, onPlayer }) {
         <h1>Reproductor de música de K-popi</h1>
       </div>
 
+      <NowBar onOpen={onPlayer} />
+
       <button className="pill pill--red gift-btn" onClick={onLibrary}>
         <FontAwesomeIcon icon={faCompactDisc} />
         Ir a biblioteca
       </button>
 
-      <NowBar onOpen={onPlayer} />
     </section>
   );
 }
