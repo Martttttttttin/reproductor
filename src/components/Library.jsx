@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faBars, faHouse, faPlay, faShuffle } from '@fortawesome/free-solid-svg-icons';
+import { faBars, faBell, faHouse, faPlay, faShuffle } from '@fortawesome/free-solid-svg-icons';
 import { usePlayer } from '../PlayerContext.jsx';
 import { formatTime } from '../utils.js';
 import Cover from './Cover.jsx';
@@ -31,6 +31,7 @@ export default function Library({ onPlayer, onHome }) {
 
   return (
     <section className="stage stage--pack view-enter">
+      <p className="library-notice"><FontAwesomeIcon icon={faBell} /> ¡Próximamente más canciones! xd</p>
       {/* Lista de canciones separadas por álbum */}
       <div className="panel list-panel">
         {status === 'loading' && <p className="empty">Cargando…</p>}

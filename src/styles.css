@@ -65,7 +65,7 @@ p {
   background-image: url('/img/intro.webp');
 }
 .backdrop--pack {
-  background-image: url('/img/empaque.webp');
+  background-image: var(--pack-background, url('/img/empaque.webp'));
 }
 
 .app {
@@ -86,7 +86,7 @@ p {
 .stage--pack {
   aspect-ratio: 941 / 1672;
   width: min(100vw, calc(100dvh * 941 / 1672));
-  background-image: url('/img/empaque.webp');
+  background-image: var(--pack-background, url('/img/empaque.webp'));
 }
 .stage--intro {
   aspect-ratio: 941 / 1672;
@@ -794,3 +794,95 @@ button:focus-visible {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Selector de fondo, compartido por las pantallas del reproductor. */
+.background-picker {
+  position: absolute;
+  width: min(100vw, calc(100dvh * 941 / 1672));
+  aspect-ratio: 941 / 1672;
+  container-type: inline-size;
+  pointer-events: none;
+}
+.background-trigger {
+  position: absolute;
+  left: 4%;
+  bottom: 2.5%;
+  display: flex;
+  align-items: center;
+  gap: 1.5cqw;
+  padding: 2.1cqw 3.2cqw;
+  border-radius: 99px;
+  background: rgba(58, 27, 11, .9);
+  border: .35cqw solid #f0c667;
+  color: #fff3dc;
+  font-size: 3.2cqw;
+  font-weight: 600;
+  box-shadow: 0 .8cqw 2cqw rgba(0, 0, 0, .35);
+  pointer-events: auto;
+}
+.background-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  display: grid;
+  place-items: center;
+  padding: 6cqw;
+  background: rgba(30, 14, 8, .48);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
+  pointer-events: auto;
+}
+.background-dialog {
+  width: min(100%, 410px);
+  max-height: 90dvh;
+  overflow: auto;
+  padding: 5cqw;
+  border-radius: 5cqw;
+  background: #fbf4ea;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, .35);
+}
+.background-heading { display: flex; justify-content: space-between; align-items: start; gap: 3cqw; margin-bottom: 4cqw; }
+.background-heading p { color: #986b4c; font-size: 3cqw; font-weight: 600; }
+.background-heading h2 { margin: .5cqw 0 0; font-size: 5cqw; }
+.background-close { display: grid; place-items: center; width: 9cqw; height: 9cqw; border-radius: 50%; background: #ead8c4; font-size: 4cqw; }
+.background-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 3cqw; }
+.background-option { position: relative; overflow: hidden; border: .7cqw solid transparent; border-radius: 3cqw; background: #e8d8c5; text-align: left; }
+.background-option--selected { border-color: var(--red); }
+.background-option img { display: block; width: 100%; aspect-ratio: 941 / 1300; object-fit: cover; object-position: center; }
+.background-option > span:not(.background-check) { display: block; padding: 1.8cqw 2cqw; font-size: 3.2cqw; font-weight: 600; }
+.background-check { position: absolute; top: 2cqw; right: 2cqw; display: grid; place-items: center; width: 7cqw; height: 7cqw; border-radius: 50%; background: var(--red); color: white; font-size: 3.5cqw; }
+.background-trigger:focus-visible, .background-dialog button:focus-visible { outline: 3px solid #e79b17; outline-offset: 2px; }
+.modal-download { text-decoration: none; }
+
+/* Secuencia de bienvenida */
+.opening {
+  position: fixed;
+  inset: 0;
+  z-index: 50;
+  display: grid;
+  place-items: center;
+  overflow: hidden;
+  background: #000;
+  color: #fff;
+}
+.opening-video { width: 100%; height: 100%; object-fit: contain; }
+.opening-play { position: absolute; font-size: clamp(16px, 4vw, 22px); padding: 14px 28px; }
+.opening-message {
+  padding: 24px;
+  text-align: center;
+  font-size: clamp(28px, 7vw, 56px);
+  font-weight: 600;
+  animation: opening-message 4s ease-in-out both;
+}
+@keyframes opening-message {
+  0% { opacity: 0; transform: translateY(14px); }
+  20%, 75% { opacity: 1; transform: translateY(0); }
+  100% { opacity: 0; transform: translateY(-10px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .opening-message { animation: none; }
+}
+.opening-video--hidden { visibility: hidden; }
+
+.library-notice { position: absolute; z-index: 1; top: 3%; left: 50%; transform: translateX(-50%); display: flex; align-items: center; justify-content: center; gap: 1.8cqw; width: max-content; max-width: 92%; padding: 2.5cqw 3.5cqw; border-radius: 3cqw; background: #fbf4ea; color: #7b391d; font-size: 3cqw; font-weight: 600; box-shadow: 0 1cqw 3cqw rgba(60, 25, 5, .3); }
+.library-notice svg { flex: none; color: var(--red); }

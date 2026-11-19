@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEnvelope, faGift } from '@fortawesome/free-solid-svg-icons';
+import { faDownload, faEnvelope, faGift } from '@fortawesome/free-solid-svg-icons';
 
 export default function Intro({ onGift }) {
   const [open, setOpen] = useState(false);
@@ -32,6 +32,10 @@ export default function Intro({ onGift }) {
                 <FontAwesomeIcon icon={faGift} />
                 Ver regalo
               </button>
+              <a className="pill pill--glass modal-download" href="/img/intro.webp" download="intro.webp">
+                <FontAwesomeIcon icon={faDownload} />
+                Descargar imagen
+              </a>
           </div>
         </div>
       )}
