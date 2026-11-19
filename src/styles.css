@@ -1,0 +1,796 @@
+/* ==========================================================================
+   Reproductor Popi — estilo empaque Terrabusi
+   Todo se posiciona en % sobre la imagen del empaque (941 × 1672),
+   así escala igual en cualquier pantalla. Los textos usan "cqw"
+   (1cqw = 1% del ancho del empaque).
+   ========================================================================== */
+
+:root {
+  --red: #d3141f;
+  --red-dark: #a30f18;
+  --brown: #4a2511;
+  --cream: #fbf4ea;
+  --cream-2: #f3e6d3;
+  --gold: #f3b21b;
+  --ink: #2b160b;
+  --font: 'Clash Display', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: var(--font);
+  background: #1a0f0a;
+  color: var(--ink);
+  -webkit-tap-highlight-color: transparent;
+  overflow: hidden;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  border: 0;
+  background: none;
+  cursor: pointer;
+  padding: 0;
+}
+
+h1,
+h2,
+p {
+  margin: 0;
+}
+
+/* ---------- Fondo desenfocado detrás del escenario ---------- */
+.backdrop {
+  position: fixed;
+  inset: 0;
+  background-size: cover;
+  background-position: center;
+  filter: blur(28px) brightness(0.55) saturate(1.1);
+  transform: scale(1.1);
+}
+.backdrop--intro {
+  background-image: url('/img/intro.webp');
+}
+.backdrop--pack {
+  background-image: url('/img/empaque.webp');
+}
+
+.app {
+  position: relative;
+  height: 100dvh;
+  display: grid;
+  place-items: center;
+}
+
+/* ---------- Escenario (imagen + capas encima) ---------- */
+.stage {
+  position: relative;
+  container-type: inline-size;
+  overflow: hidden;
+  background-size: 100% 100%;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+}
+.stage--pack {
+  aspect-ratio: 941 / 1672;
+  width: min(100vw, calc(100dvh * 941 / 1672));
+  background-image: url('/img/empaque.webp');
+}
+.stage--intro {
+  aspect-ratio: 941 / 1672;
+  width: min(100vw, calc(100dvh * 941 / 1672));
+  background-image: url('/img/intro.webp');
+}
+
+.view-enter {
+  animation: enter 0.45s ease both;
+}
+@keyframes enter {
+  from {
+    opacity: 0;
+    transform: scale(1.015);
+  }
+}
+
+/* Entrada suave de las pantallas del empaque: el fondo queda fijo (sin parpadeo)
+   y solo aparecen los elementos, uno tras otro. */
+.stage--pack.view-enter {
+  animation: none;
+}
+.stage--pack > .panel,
+.stage--pack > .pill,
+.stage--pack > .progress {
+  animation: soft-in 0.7s cubic-bezier(0.22, 0.7, 0.2, 1) backwards;
+}
+.stage--pack > :nth-child(2) { animation-delay: 0.08s; }
+.stage--pack > :nth-child(3) { animation-delay: 0.16s; }
+.stage--pack > :nth-child(4) { animation-delay: 0.24s; }
+.stage--pack > :nth-child(5) { animation-delay: 0.32s; }
+@keyframes soft-in {
+  from {
+    opacity: 0;
+    transform: translateY(2.4cqw) scale(0.985);
+  }
+}
+
+/* ---------- Piezas reutilizables ---------- */
+.panel {
+  position: absolute;
+  background: var(--cream);
+  border-radius: 4.2cqw;
+  box-shadow: 0 0.6cqw 2cqw rgba(60, 25, 5, 0.3), inset 0 0 0 0.25cqw rgba(255, 255, 255, 0.6);
+}
+
+.pill {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 1.6cqw;
+  font-weight: 600;
+  font-size: 3.2cqw;
+  padding: 1.9cqw 4.6cqw;
+  border-radius: 99cqw;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+.pill:active {
+  transform: scale(0.96);
+}
+.pill:hover {
+  filter: brightness(1.06);
+}
+.pill--red {
+  background: linear-gradient(#e11f2b, var(--red-dark));
+  color: #fff;
+  box-shadow: 0 0.8cqw 2cqw rgba(120, 5, 12, 0.5), inset 0 0.2cqw 0 rgba(255, 255, 255, 0.35);
+}
+.pill--glass {
+  background: rgba(255, 255, 255, 0.16);
+  color: #fff;
+  border: 0.3cqw solid rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(10px);
+  box-shadow: 0 1cqw 4cqw rgba(0, 0, 0, 0.35);
+}
+.pill--wood {
+  background: linear-gradient(#5a2c15, #3a1b0b);
+  color: #fff3dc;
+  border: 0.45cqw solid #f0c667;
+  box-shadow: 0 0.8cqw 2cqw rgba(0, 0, 0, 0.4);
+}
+
+.round {
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  aspect-ratio: 1;
+  color: #fff;
+}
+.round--red {
+  background: radial-gradient(circle at 35% 30%, #f0323c, var(--red) 55%, var(--red-dark));
+  box-shadow: 0 0.6cqw 1.6cqw rgba(120, 5, 12, 0.5), inset 0 0.2cqw 0 rgba(255, 255, 255, 0.4);
+}
+.round:active {
+  transform: scale(0.94);
+}
+
+.cover {
+  display: block;
+  object-fit: cover;
+  border-radius: 1.6cqw;
+  background: var(--cream-2);
+  flex: none;
+}
+.cover--empty {
+  display: grid;
+  place-items: center;
+  color: #c9a98a;
+}
+.cover--sm {
+  width: 5.2cqw;
+  height: 5.2cqw;
+  border-radius: 1.1cqw;
+  font-size: 2.4cqw;
+}
+.cover--md {
+  width: 7.6cqw;
+  height: 7.6cqw;
+  font-size: 3.4cqw;
+}
+
+/* ==========================================================================
+   Pantalla 1 · el chico + modal
+   ========================================================================== */
+.intro-btn {
+  position: absolute;
+  left: 50%;
+  bottom: 7%;
+  translate: -50% 0;
+  font-size: 4.4cqw;
+  padding: 3cqw 7cqw;
+  gap: 2.4cqw;
+}
+
+.modal-overlay {
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  padding: 8cqw;
+  background: rgba(15, 10, 20, 0.35);
+  backdrop-filter: blur(14px);
+  animation: fade 0.35s ease both;
+}
+@keyframes fade {
+  from {
+    opacity: 0;
+  }
+}
+
+.modal-card {
+  width: 100%;
+  max-height: 100%;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: none;
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  justify-items: center;
+  gap: 3.5cqw;
+  padding: 7cqw 6cqw;
+  text-align: center;
+  color: #fff;
+  background: rgba(20, 12, 8, 0.42); /* más oscuro para que el texto se lea sobre la foto */
+  border: 0.35cqw solid rgba(255, 255, 255, 0.4);
+  border-radius: 7cqw;
+  box-shadow: 0 3cqw 10cqw rgba(0, 0, 0, 0.45);
+  animation: pop 0.45s cubic-bezier(0.2, 1.2, 0.4, 1) both;
+}
+.modal-card::-webkit-scrollbar {
+  display: none;
+}
+@keyframes pop {
+  from {
+    opacity: 0;
+    transform: translateY(4cqw) scale(0.92);
+  }
+}
+.modal-kicker {
+  font-size: 3.4cqw;
+  letter-spacing: 0.35em;
+  text-transform: uppercase;
+  opacity: 0.8;
+}
+/* Título: "Feliz cumpleaños" + nombre grande.
+   Cualquier texto largo que quede dentro del h1 (sin <span>) usa el tamaño base de abajo. */
+.modal-card h1 {
+  display: grid;
+  gap: 1cqw;
+  font-size: 3.6cqw;
+  line-height: 1.45;
+  font-weight: 500;
+  text-wrap: pretty;
+  text-shadow: 0 0.6cqw 3cqw rgba(0, 0, 0, 0.45);
+}
+.modal-card h1 > span:first-child {
+  font-size: 6.4cqw;
+  line-height: 1.05;
+  font-weight: 600;
+}
+.modal-name {
+  font-size: 12cqw !important;
+  font-weight: 700 !important;
+  line-height: 1 !important;
+}
+
+/* Mensaje largo en un párrafo aparte (recomendado) */
+.modal-text {
+  font-size: 3.6cqw;
+  line-height: 1.5;
+  font-weight: 500;
+  text-wrap: pretty;
+  text-shadow: 0 0.4cqw 2cqw rgba(0, 0, 0, 0.45);
+}
+.modal-card .pill {
+  flex: none;
+  font-size: 4cqw;
+  padding: 2.6cqw 7cqw;
+}
+
+/* ==========================================================================
+   Pantalla 2 · empaque de bienvenida
+   ========================================================================== */
+.gift-card {
+  left: 17.0%;
+  top: 41.27%;
+  width: 51.01%;
+  height: 14.0%;
+  display: grid;
+  place-content: center;
+  justify-items: center;
+  gap: 1.6cqw;
+  padding: 0 3cqw;
+  text-align: center;
+}
+.gift-note {
+  color: var(--red);
+  font-size: 5.4cqw;
+}
+.gift-card h1 {
+  font-size: 4.4cqw;
+  line-height: 1.12;
+  font-weight: 600;
+  color: var(--brown);
+}
+.gift-btn {
+  position: absolute;
+  left: 42.51%;
+  top: 58.13%;
+  translate: -50% 0;
+  font-size: 3.6cqw;
+  padding: 2.6cqw 6cqw;
+}
+
+/* ==========================================================================
+   Pantalla 3 · biblioteca
+   ========================================================================== */
+.list-panel {
+  left: 17.0%;
+  top: 36.6%;
+  width: 51.01%;
+  height: 25.72%;
+  padding: 1.4cqw 0 1.4cqw 1.4cqw;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  scrollbar-width: thin;
+  scrollbar-color: #d9b48d transparent;
+}
+.list-panel::-webkit-scrollbar {
+  width: 0.9cqw;
+}
+.list-panel::-webkit-scrollbar-thumb {
+  background: #d9b48d;
+  border-radius: 1cqw;
+}
+
+.empty {
+  padding: 6cqw 3cqw;
+  text-align: center;
+  font-size: 2.6cqw;
+  color: #8a6a50;
+  line-height: 1.4;
+}
+.empty code {
+  background: var(--cream-2);
+  padding: 0 0.8cqw;
+  border-radius: 0.8cqw;
+}
+
+.album + .album {
+  margin-top: 1cqw;
+}
+.album-head {
+  position: sticky;
+  top: -1.4cqw;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  gap: 1.6cqw;
+  padding: 1.2cqw 2cqw 1cqw 0.6cqw;
+  background: var(--cream);
+  border-bottom: 0.25cqw solid #e6d3bb;
+}
+.album-meta {
+  min-width: 0;
+}
+.album-meta h2 {
+  font-size: 2.7cqw;
+  font-weight: 700;
+  color: var(--brown);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.album-meta p {
+  font-size: 2cqw;
+  color: #8a6a50;
+}
+
+.row {
+  width: calc(100% - 1.4cqw);
+  display: flex;
+  align-items: center;
+  gap: 1.8cqw;
+  padding: 1.1cqw 1.4cqw 1.1cqw 0.6cqw;
+  margin-top: 0.2cqw;
+  border-radius: 2.4cqw;
+  text-align: left;
+  transition: background 0.15s;
+}
+.row:hover {
+  background: rgba(211, 20, 31, 0.06);
+}
+.row--active {
+  background: #f9d9c4;
+}
+.row .cover {
+  width: 6.8cqw;
+  height: 6.8cqw;
+  font-size: 3cqw;
+}
+.row-text {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  line-height: 1.2;
+}
+.row-text strong {
+  font-size: 2.7cqw;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.row-text small {
+  font-size: 2.1cqw;
+  color: #7b5d46;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.row-time {
+  font-size: 2.2cqw;
+  color: #6f5039;
+  font-variant-numeric: tabular-nums;
+}
+.row-state {
+  width: 2.8cqw;
+  display: grid;
+  place-items: center;
+  color: var(--red);
+  font-size: 2.4cqw;
+}
+
+/* ecualizador animado */
+.eq {
+  display: flex;
+  align-items: flex-end;
+  gap: 0.35cqw;
+  height: 2.4cqw;
+}
+.eq i {
+  display: block;
+  width: 0.55cqw;
+  height: 100%;
+  background: var(--red);
+  border-radius: 0.3cqw;
+  transform-origin: bottom;
+  animation: eq 0.9s ease-in-out infinite;
+}
+.eq i:nth-child(2) {
+  animation-delay: -0.3s;
+}
+.eq i:nth-child(3) {
+  animation-delay: -0.6s;
+}
+@keyframes eq {
+  0%,
+  100% {
+    transform: scaleY(0.25);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+/* barra de la canción que suena */
+.now-bar {
+  left: 15.94%;
+  top: 64.35%;
+  width: 68.01%;
+  height: 6.46%;
+  display: flex;
+  align-items: center;
+  gap: 2.4cqw;
+  padding: 0 3cqw 0 2cqw;
+  border-radius: 99cqw;
+  cursor: pointer;
+}
+.now-bar .cover--md {
+  border-radius: 1.8cqw;
+}
+.now-text {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  line-height: 1.2;
+  padding-left: 2cqw;
+  border-left: 0.25cqw solid #d7bfa4;
+}
+.now-text strong {
+  font-size: 3.1cqw;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.now-text small {
+  font-size: 2.5cqw;
+  color: #7b5d46;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.now-bar .round {
+  width: 7cqw;
+  font-size: 2.8cqw;
+}
+
+/* botón Menú (misma posición en biblioteca y reproductor) */
+.menu-btn {
+  position: absolute;
+  left: 74.4%;
+  top: 80.14%;
+  width: 22.32%;
+  height: 3.47%;
+  font-size: 3cqw;
+  padding: 0;
+}
+
+/* hoja del menú */
+.sheet-overlay {
+  position: absolute;
+  z-index: 30;
+  inset: 0;
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  padding-bottom: 6%;
+  background: rgba(20, 10, 5, 0.4);
+  backdrop-filter: blur(6px);
+  animation: fade 0.25s ease both;
+}
+.sheet {
+  width: 62%;
+  display: grid;
+  gap: 0.6cqw;
+  padding: 2cqw;
+  background: var(--cream);
+  border-radius: 4.5cqw;
+  box-shadow: 0 2cqw 6cqw rgba(0, 0, 0, 0.45);
+  animation: pop 0.3s ease both;
+}
+.sheet-item {
+  display: flex;
+  align-items: center;
+  gap: 2cqw;
+  padding: 2.4cqw 3cqw;
+  border-radius: 3cqw;
+  font-size: 3.2cqw;
+  font-weight: 600;
+  color: var(--brown);
+  text-align: left;
+}
+.sheet-item:hover {
+  background: var(--cream-2);
+}
+.sheet-item svg {
+  width: 3.6cqw;
+  color: var(--red);
+}
+.sheet-item--close {
+  color: #8a6a50;
+}
+
+/* ==========================================================================
+   Pantalla 4 · reproductor
+   ========================================================================== */
+.title-bar {
+  left: 17.0%;
+  top: 36.24%;
+  width: 51.01%;
+  height: 2.39%;
+  display: grid;
+  place-items: center;
+  padding: 0 3cqw;
+  border-radius: 99cqw;
+}
+.title-bar strong {
+  max-width: 100%;
+  font-size: 2.9cqw;
+  font-weight: 700;
+  color: var(--brown);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.art {
+  left: 17.0%;
+  top: 39.23%;
+  width: 51.01%;
+  height: 23.92%;
+  overflow: hidden;
+  display: grid;
+  place-items: center;
+  isolation: isolate;
+}
+/* fondo: la misma portada desenfocada, para rellenar los lados sin recortar la imagen */
+.art::before {
+  content: '';
+  position: absolute;
+  inset: -12%;
+  z-index: -1;
+  background: var(--cover) center / cover;
+  filter: blur(18px) saturate(1.15) brightness(0.92);
+}
+.art img {
+  width: 100%;
+  height: 100%;
+  object-fit: contain; /* imagen completa; cambia a "cover" si prefieres que llene el recuadro y recorte */
+  animation: fade 0.6s ease both;
+}
+.art-note {
+  font-size: 18cqw;
+  color: #d8c0a6;
+}
+
+/* barra de progreso arrastrable (tiempos a los lados) */
+.progress {
+  position: absolute;
+  left: 17.0%;
+  top: 63.64%;
+  width: 51.01%;
+  display: flex;
+  align-items: center;
+  gap: 2cqw;
+  font-size: 2.6cqw;
+  font-weight: 600;
+  color: var(--brown);
+  font-variant-numeric: tabular-nums;
+}
+.progress > span {
+  flex: none;
+  min-width: 7.6cqw;
+  text-shadow: 0 0 1.2cqw rgba(255, 235, 190, 0.9);
+}
+.progress > span:last-child {
+  text-align: right;
+}
+.progress input[type='range'] {
+  --pct: 0%;
+  display: block;
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  height: 4cqw;
+  margin: 0;
+  background: transparent;
+  appearance: none;
+  -webkit-appearance: none;
+  cursor: pointer;
+  touch-action: none; /* el arrastre horizontal no hace scroll */
+}
+.progress input[type='range']::-webkit-slider-runnable-track {
+  height: 1.1cqw;
+  border-radius: 1cqw;
+  background: linear-gradient(to right, var(--red) var(--pct), rgba(255, 245, 225, 0.75) var(--pct));
+  box-shadow: inset 0 0 0 0.2cqw rgba(120, 60, 10, 0.25);
+}
+.progress input[type='range']::-moz-range-track {
+  height: 1.1cqw;
+  border-radius: 1cqw;
+  background: rgba(255, 245, 225, 0.75);
+  box-shadow: inset 0 0 0 0.2cqw rgba(120, 60, 10, 0.25);
+}
+.progress input[type='range']::-moz-range-progress {
+  height: 1.1cqw;
+  border-radius: 1cqw;
+  background: var(--red);
+}
+.progress input[type='range']::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 3.8cqw;
+  height: 3.8cqw;
+  margin-top: -1.35cqw;
+  border-radius: 50%;
+  border: 0.45cqw solid #fff;
+  background: radial-gradient(circle at 35% 30%, #f0323c, var(--red-dark));
+  box-shadow: 0 0.4cqw 1.2cqw rgba(0, 0, 0, 0.45);
+}
+.progress input[type='range']::-moz-range-thumb {
+  width: 3cqw;
+  height: 3cqw;
+  border-radius: 50%;
+  border: 0.45cqw solid #fff;
+  background: radial-gradient(circle at 35% 30%, #f0323c, var(--red-dark));
+  box-shadow: 0 0.4cqw 1.2cqw rgba(0, 0, 0, 0.45);
+}
+.progress input[type='range']:focus-visible {
+  outline: 0.4cqw solid rgba(255, 255, 255, 0.8);
+  outline-offset: 0.6cqw;
+  border-radius: 2cqw;
+}
+.progress-times {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 0.4cqw;
+  font-size: 2.5cqw;
+  font-weight: 600;
+  color: var(--brown);
+  font-variant-numeric: tabular-nums;
+}
+
+/* controles */
+.controls {
+  left: 15.94%;
+  top: 66.27%;
+  width: 68.01%;
+  height: 5.38%;
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+  padding: 0 2cqw;
+  border-radius: 99cqw;
+}
+.ctl {
+  position: relative;
+  width: 7cqw;
+  height: 7cqw;
+  display: grid;
+  place-items: center;
+  font-size: 3.8cqw;
+  color: var(--brown);
+  border-radius: 50%;
+  transition: color 0.15s, transform 0.15s;
+}
+.ctl:active {
+  transform: scale(0.88);
+}
+.ctl--on {
+  color: var(--red);
+}
+.ctl--on::after {
+  content: '';
+  position: absolute;
+  bottom: 0.3cqw;
+  width: 0.9cqw;
+  height: 0.9cqw;
+  border-radius: 50%;
+  background: var(--red);
+}
+.ctl-badge {
+  position: absolute;
+  top: 0.3cqw;
+  right: 0.2cqw;
+  font-size: 1.8cqw;
+  font-weight: 700;
+}
+.round--xl {
+  width: 8.8cqw;
+  font-size: 3.8cqw;
+}
+
+/* ---------- Accesibilidad ---------- */
+button:focus-visible {
+  outline: 0.5cqw solid #fff;
+  outline-offset: 0.3cqw;
+}
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
