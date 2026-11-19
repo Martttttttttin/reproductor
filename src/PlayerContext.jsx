@@ -31,7 +31,7 @@ export function PlayerProvider({ children }) {
   // ---- Carga de la biblioteca ------------------------------------------
   useEffect(() => {
     let alive = true;
-    fetch('/api/albums')
+    fetch(import.meta.env.DEV ? '/api/albums' : '/albums.json')
       .then((r) => {
         if (!r.ok) throw new Error(r.statusText);
         return r.json();

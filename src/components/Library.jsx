@@ -35,7 +35,7 @@ export default function Library({ onPlayer, onHome }) {
       <div className="panel list-panel">
         {status === 'loading' && <p className="empty">Cargando…</p>}
         {status === 'error' && (
-          <p className="empty">No se pudo conectar con el servidor. ¿Está encendido?</p>
+          <p className="empty">No se pudo cargar la biblioteca. Intenta recargar la página.</p>
         )}
         {status === 'ready' && albums.length === 0 && (
           <p className="empty">

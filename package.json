@@ -9,7 +9,7 @@
     "server": "node --watch server/index.js",
     "client": "vite",
     "scan": "node server/scan.js",
-    "build": "vite build",
+    "build": "vite build && node server/build-library.js",
     "start": "node server/index.js"
   },
   "dependencies": {

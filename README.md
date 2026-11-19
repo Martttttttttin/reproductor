@@ -73,3 +73,7 @@ Las imágenes están en `public/img/` (`intro.webp`, `empaque.webp`).
 - **Clash Display** se carga desde Fontshare (`index.html`). Si quieres que funcione sin internet,
   descarga los `.woff2` y decláralos con `@font-face` en `styles.css`.
 - Iconos: Font Awesome (`@fortawesome/react-fontawesome`).
+
+## Publicar en Netlify
+
+Configura el comando de compilación `npm run build` y el directorio de publicación `dist`. La compilación genera la biblioteca y copia los archivos de `media/` a `dist/media/`. Asegúrate de que las canciones y portadas estén incluidas en el repositorio o en los archivos que subes a Netlify. Para agregar canciones, vuelve a desplegar el sitio. Node 22.5 o superior es necesario para generar la biblioteca.
